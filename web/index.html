@@ -42,6 +42,20 @@
 			{{/.}}
 		</script>
 	</div>
+    <div id="issues">
+        Loading issues ...
+        <script type="text/x-template" id="newIssues-template">
+            {{#.}}
+            <div class="new_issue">
+                <img class="portrait" src="{{avatarUrl}}"/>
+                <div class="description">
+                    <p>New Issue : #{{issueNumber}}</p>
+                </div>
+            </div>
+            {{/.}}
+        </script>
+
+    </div>
 </div>
 
 </body>
@@ -56,6 +70,9 @@
 	});
 	$.getJSON('badges', function (json) {
 		$("#badges").html(Mustache.to_html($('#badges-template').html(), json));
+	});
+	$.getJSON('newIssues', function (json) {
+		$("#issues").html(Mustache.to_html($('#newIssues-template').html(), json));
 	});
 	$(function () {
 		var previousScrollTop, currentScrollTop, yPosition = 0;

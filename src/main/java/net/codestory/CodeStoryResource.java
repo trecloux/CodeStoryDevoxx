@@ -6,6 +6,7 @@ import com.sun.jersey.api.*;
 import net.codestory.badges.*;
 import net.codestory.github.*;
 import net.codestory.github.Commit;
+import net.codestory.github.IssueEvent;
 import org.eclipse.egit.github.core.*;
 import org.lesscss.*;
 
@@ -24,6 +25,7 @@ import static net.gageot.listmaker.ListMaker.*;
 public class CodeStoryResource {
 	@Inject AllCommits allCommits;
 	@Inject AllBadges allBadges;
+    @Inject AllIssues allIssues;
 
 	@GET
 	public Response index() {
@@ -36,6 +38,13 @@ public class CodeStoryResource {
 	public List<Commit> commits() {
 		return with(allCommits.list()).to(TO_COMMIT).toList();
 	}
+
+    @GET
+    @Path("newIssues")
+    @Produces("application/json;charset=UTF-8")
+    public List<IssueEvent> newIssues() {
+        return allIssues.list();
+    }
 
 	@GET
 	@Path("badges")

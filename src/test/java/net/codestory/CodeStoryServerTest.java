@@ -3,6 +3,7 @@ package net.codestory;
 import com.google.inject.*;
 import com.jayway.restassured.specification.*;
 import net.codestory.github.*;
+import net.codestory.github.IssueEvent;
 import net.codestory.jenkins.*;
 import net.gageot.test.rules.*;
 import net.gageot.test.utils.*;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.*;
 public class CodeStoryServerTest {
 	static AllCommits mockAllCommits = mock(AllCommits.class);
 	static AllBuilds mockAllBuilds = mock(AllBuilds.class);
+    static AllIssues mockAllIssues = mock(AllIssues.class);
 
 	@ClassRule
 	public static ServiceRule<CodeStoryServer> codeStoryServer = startWithRandomPort(CodeStoryServer.class, new AbstractModule() {
@@ -31,6 +33,7 @@ public class CodeStoryServerTest {
 		protected void configure() {
 			bind(AllCommits.class).toInstance(mockAllCommits);
 			bind(AllBuilds.class).toInstance(mockAllBuilds);
+            bind(AllIssues.class).toInstance(mockAllIssues);
 		}
 	});
 
@@ -42,9 +45,12 @@ public class CodeStoryServerTest {
 
 		when(mockAllBuilds.list()).thenReturn(asList( //
 				build("SUCCESS", "sha1")));
+
+        when(mockAllIssues.list()).thenReturn(asList(
+                issue(23, "url3")));
 	}
 
-	@Test
+    @Test
 	public void should_show_home_page() {
 		assertThat(jsTest("testHomePage.js")).isTrue();
 	}
@@ -94,6 +100,11 @@ public class CodeStoryServerTest {
 				.setAuthor(new User().setLogin(login).setAvatarUrl(avatarUrl)) //
 				.setCommit(new Commit().setMessage(message).setAuthor(new CommitUser().setDate(new Date())));
 	}
+
+    private IssueEvent issue(int issueNumber, String avatarUrl) {
+        return new IssueEvent(issueNumber, null, null, avatarUrl);
+    }
+
 
 	static int port() {
 		return codeStoryServer.service().getPort();

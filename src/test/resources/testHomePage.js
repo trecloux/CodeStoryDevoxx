@@ -1,6 +1,8 @@
 Browser = require("zombie");
 expect = require("expect.js");
 
+//Browser.debug = true;
+
 home = "http://localhost:" + process.env.PORT + "/";
 
 test("Checking page title", function (done) {
@@ -46,3 +48,11 @@ test("Checking badges", function (done) {
     });
 });
 
+test("Checking issue creation", function (done) {
+    Browser.visit(home, function (e, browser) {
+        expect(browser.query("#issues .new_issue:nth-child(1) :contains('New Issue : #23')")).to.be.ok();
+        expect(browser.query("#issues .new_issue:nth-child(1) img[src='url3']")).to.be.ok();
+
+        done();
+    });
+});

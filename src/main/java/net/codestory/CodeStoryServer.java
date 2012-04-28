@@ -55,6 +55,7 @@ public class CodeStoryServer extends AbstractIdleService {
 		@Override
 		protected void configure() {
 			bind(AllCommits.class).toInstance(new AllCommits("dgageot", "NodeGravatar"));
+            bind(AllIssues.class).toInstance(new AllIssues("jsevellec", "cassandra-unit"));
 		}
 	}
 }
